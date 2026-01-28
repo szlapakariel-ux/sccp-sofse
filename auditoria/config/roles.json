@@ -1,0 +1,20 @@
+{
+    "users": {
+        "operador@sofse.gob.ar": {
+            "password": "123",
+            "role": "MESA_DEL_USUARIO"
+        },
+        "gestor@sofse.gob.ar": {
+            "password": "123",
+            "role": "GESTOR_ERRORES"
+        },
+        "gerente@sofse.gob.ar": {
+            "password": "123",
+            "role": "GERENCIAL"
+        },
+        "admin@sofse.gob.ar": {
+            "password": "123",
+            "role": "EJECUTIVO"
+        }
+    }
+}

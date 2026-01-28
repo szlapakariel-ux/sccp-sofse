@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Vista Gerencial</h1>
+    <p>Métricas de Calidad por Línea.</p>
+</div>
+
+<div class="split-view">
+    <div class="card">
+        <h3>Ranking de Errores (Semanal)</h3>
+        <ul class="ranking-list">
+            <li>
+                <span class="rank-name">Línea Roca</span>
+                <span class="rank-val error-text">15% Rechazo</span>
+            </li>
+            <li>
+                <span class="rank-name">Línea Sarmiento</span>
+                <span class="rank-val warning-text">8% Rechazo</span>
+            </li>
+            <li>
+                <span class="rank-name">Línea Mitre</span>
+                <span class="rank-val success-text">2% Rechazo</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Semáforo de Calidad</h3>
+        <div class="semaphore-grid">
+            <div class="sem-item red">
+                <div class="light"></div>
+                <span>ROCA (Atención)</span>
+            </div>
+            <div class="sem-item yellow">
+                <div class="light"></div>
+                <span>SARMIENTO</span>
+            </div>
+            <div class="sem-item green">
+                <div class="light"></div>
+                <span>MITRE</span>
+            </div>
+            <div class="sem-item green">
+                <div class="light"></div>
+                <span>BELGRANO SUR</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Tablero Operativo</h1>
+    <p>Seguimiento en tiempo real de validaciones.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Pendientes</div>
+    </div>
+    <div class="stat-card error">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Rechazados</div>
+    </div>
+    <div class="stat-card success">
+        <div class="stat-value">45</div>
+        <div class="stat-label">Aprobados Hoy</div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <h3>Últimos Casos</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Línea</th>
+                <th>Estado</th>
+                <th>Motivo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.linea }}</td>
+                <td>
+                    <span class="badge {% if log.estado == 'APROBADO' %}badge-success{% else %}badge-danger{% endif %}">
+                        {{ log.estado }}
+                    </span>
+                </td>
+                <td>{{ log.motivo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

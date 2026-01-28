@@ -1,0 +1,143 @@
+:root {
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --bg: #f4f6f9;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    color: #333;
+}
+
+.navbar {
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--secondary);
+    margin-left: 1.5rem;
+    font-weight: 500;
+}
+.menu a:hover { color: var(--primary); }
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.page-header { margin-bottom: 2rem; }
+.page-header h1 { margin: 0; font-size: 1.8rem; }
+.page-header p { color: var(--secondary); margin-top: 0.5rem; }
+
+/* Dashboard Helpers */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.stat-card.error { border-left-color: var(--danger); }
+.stat-card.success { border-left-color: var(--success); }
+.stat-value { font-size: 2rem; font-weight: 700; }
+.stat-label { color: var(--secondary); font-size: 0.9rem; }
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th, .data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    background: var(--secondary);
+}
+.badge-success { background: var(--success); }
+.badge-danger { background: var(--danger); }
+
+/* Validator */
+.split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-logout { background: transparent !important; color: var(--danger) !important; border: 1px solid var(--danger); }
+
+/* Login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+.login-card { width: 100%; max-width: 400px; text-align: center; }
+
+/* Semaphore & KPIs */
+.semaphore-grid { display: grid; gap: 1rem; }
+.sem-item { display: flex; align-items: center; gap: 1rem; }
+.light { width: 20px; height: 20px; border-radius: 50%; }
+.red .light { background: var(--danger); }
+.yellow .light { background: var(--warning); }
+.green .light { background: var(--success); }
+
+.kpi-row { display: flex; gap: 1.5rem; }
+.kpi-card { flex: 1; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.big-number { font-size: 2.5rem; font-weight: 700; margin: 1rem 0; }
+.trend.up { color: var(--success); }
+.trend.down { color: var(--success); } /* improvement in time is good */

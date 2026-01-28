@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Validador Pre-Publicación</h1>
+    <p>Verifique el cumplimiento normativo antes de difundir.</p>
+</div>
+
+<div class="split-view">
+    <div class="card">
+        <h3>Nuevo Mensaje</h3>
+        <form id="validadorForm">
+            <div class="form-group">
+                <label>Línea</label>
+                <select name="linea" class="form-control">
+                    <option>Sarmiento</option>
+                    <option>Mitre</option>
+                    <option>Roca</option>
+                    <option>San Martín</option>
+                    <option>Belgrano Sur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Mensaje</label>
+                <select name="tipo" class="form-control">
+                    <option>Demora</option>
+                    <option>Cancelación</option>
+                    <option>Normalización</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Texto del Mensaje</label>
+                <textarea name="mensaje" rows="5" class="form-control"
+                    placeholder="Escriba el mensaje aquí..."></textarea>
+            </div>
+            <button type="button" onclick="simularValidacion()" class="btn btn-primary">Validar Mensaje</button>
+        </form>
+    </div>
+
+    <div class="card result-card" id="resultadoBox" style="display:none;">
+        <h3 id="resTitulo">Resultado</h3>
+        <div id="resBadge" class="badge">PENDIENTE</div>
+        <ul id="resErrores" class="error-list"></ul>
+    </div>
+</div>
+
+<script>
+    function simularValidacion() {
+        const box = document.getElementById('resultadoBox');
+        const badge = document.getElementById('resBadge');
+        const lista = document.getElementById('resErrores');
+
+        box.style.display = 'block';
+
+        // Simulación random
+        const aprobado = Math.random() > 0.3;
+
+        if (aprobado) {
+            badge.className = 'badge badge-success';
+            badge.innerText = 'APROBADO PARA PUBLICAR';
+            lista.innerHTML = '<li>Sin observaciones. Cumple con Manual de Estilo v2.</li>';
+        } else {
+            badge.className = 'badge badge-danger';
+            badge.innerText = 'RECHAZADO';
+            lista.innerHTML = '<li>Error: Tono no institucional "Lamentamos informar".</li><li>Error: Falta estimación de tiempo.</li>';
+        }
+    }
+</script>
+{% endblock %}

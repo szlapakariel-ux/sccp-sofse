@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Resumen Ejecutivo</h1>
+    <p>Panorama High-Level para Directorio.</p>
+</div>
+
+<div class="kpi-row">
+    <div class="kpi-card">
+        <h3>Indice de Claridad</h3>
+        <div class="big-number">94.2%</div>
+        <div class="trend up">▲ 1.2% vs mes anterior</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Tiempo Prom. Validación</h3>
+        <div class="big-number">45s</div>
+        <div class="trend down">▼ 5s (Mejora)</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Volumen Mensual</h3>
+        <div class="big-number">1,240</div>
+        <div class="trend">Mensajes auditados</div>
+    </div>
+</div>
+
+<div class="card mt-4 highlight-card">
+    <h3>Resumen Narrativo Automático</h3>
+    <p>
+        Durante la última semana, el desempeño general de la comunicación ha mejorado notablemente.
+        La Línea Mitre lidera en cumplimiento normativo, mientras que se han detectado desvíos
+        recurrentes en el tono de mensajes de cancelación en Línea Roca.
+        Se recomienda reforzar capacitación en el turno mañana.
+    </p>
+</div>
+{% endblock %}

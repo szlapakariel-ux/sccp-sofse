@@ -1,0 +1,32 @@
+[
+    {
+        "timestamp": "2026-01-27 10:15",
+        "linea": "Sarmiento",
+        "estado": "RECHAZADO",
+        "motivo": "Tono incorrecto"
+    },
+    {
+        "timestamp": "2026-01-27 10:20",
+        "linea": "Mitre",
+        "estado": "APROBADO",
+        "motivo": "-"
+    },
+    {
+        "timestamp": "2026-01-27 10:45",
+        "linea": "Roca",
+        "estado": "APROBADO",
+        "motivo": "-"
+    },
+    {
+        "timestamp": "2026-01-27 11:00",
+        "linea": "Belgrano Sur",
+        "estado": "RECHAZADO",
+        "motivo": "Falta horario"
+    },
+    {
+        "timestamp": "2026-01-27 11:30",
+        "linea": "Sarmiento",
+        "estado": "APROBADO",
+        "motivo": "-"
+    }
+]
