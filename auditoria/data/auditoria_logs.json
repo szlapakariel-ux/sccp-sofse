@@ -1,42 +1,35 @@
 [
     {
-        "id": "MSG-1001",
-        "timestamp": "2026-01-28 08:30",
-        "operador": "op1@sofse",
-        "texto": "Demoras en ramal Tigre por falla técnica.",
+        "id": "#00647842",
+        "timestamp": "2026-01-06 07:50",
+        "operador": "Gustavo Reinaga",
+        "texto": "17.1.A - EL TREN N   3337 DEMORANDO EN ESTACION PALERMO POR INCONVENIENTES EN LA FORMACION  21 .",
         "estado": "PRE_ANALIZADO",
-        "resultado_sistema": "CORRECTO",
-        "regla_sistema": "R-102",
-        "feedback_humano": null
+        "resultado_sistema": "INCORRECTO",
+        "regla_sistema": "R-COMP-INCOMPLETO",
+        "feedback_humano": null,
+        "detalle_sistema": "Falta causa específica, Horario, Origen/Destino"
     },
     {
-        "id": "MSG-1002",
-        "timestamp": "2026-01-28 08:45",
-        "operador": "op2@sofse",
-        "texto": "Lamentamos las molestias ocasionadas.",
+        "id": "#00648188",
+        "timestamp": "2026-01-08 03:39",
+        "operador": "Carlos Mendoza",
+        "texto": "17.2.A - EL TREN  N  @T3312 DE LAS 0515  HS PARTIENDO DESDE JOSE C. PAZ  HACIA @ERETIRO  HA  SIDO CANCELADO POR RAZONES OPERATIVAS",
         "estado": "PRE_ANALIZADO",
         "resultado_sistema": "OBSERVACION",
-        "regla_sistema": "R-PROHIBIDA-LAMENTAR",
-        "feedback_humano": null
+        "regla_sistema": "R-CODIGO-INCONSISTENTE",
+        "feedback_humano": null,
+        "detalle_sistema": "Uso de código 17 para contingencia operativa (05). Timing tardío."
     },
     {
-        "id": "MSG-1003",
-        "timestamp": "2026-01-28 09:00",
-        "operador": "op1@sofse",
-        "texto": "Interrupción total por accidente.",
+        "id": "#00647613",
+        "timestamp": "2026-01-05 07:53",
+        "operador": "Facundo Ezequiel Martinez",
+        "texto": "3.2.A EL TREN 3341 DE LAS 08 01HS. PARTIENDO DESDE RETIRO (LSM)  HACIA JOSE C. PAZ  HA SIDO CANCELADO POR PROBLEMAS TECNICOS",
         "estado": "AUDITADO_HUMANO",
         "resultado_sistema": "CORRECTO",
-        "regla_sistema": "R-CRITICA",
-        "feedback_humano": "CONFIRMADO"
-    },
-    {
-        "id": "MSG-1004",
-        "timestamp": "2026-01-28 09:15",
-        "operador": "op3@sofse",
-        "texto": "Tren corto a Liniers.",
-        "estado": "ERROR_DE_SISTEMA",
-        "resultado_sistema": "INCORRECTO",
-        "regla_sistema": "R-TREN-CORTO",
-        "feedback_humano": "FALSO_POSITIVO"
+        "regla_sistema": "R-MODELO-BEST-PRACTICE",
+        "feedback_humano": "CONFIRMADO",
+        "detalle_sistema": "Estructura impecable. Timing excelente."
     }
 ]
