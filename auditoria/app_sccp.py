@@ -100,7 +100,7 @@ def logout():
 @login_required
 @role_required(['GESTOR_ERRORES', 'GERENCIAL', 'EJECUTIVO', 'MESA_DEL_USUARIO']) # Fix roles later, allowing audit for MVP
 def panel_sistema():
-    all_logs = load_logs()
+    all_logs = db.read()
     # Filter: Solo mostrar lo que el sistema "vio"
     return render_template('panel_1_sistema.html', logs=all_logs)
 
@@ -143,7 +143,7 @@ def panel_auditoria_decision():
 @login_required
 @role_required(['GESTOR_ERRORES', 'GERENCIAL'])
 def panel_errores_sistema():
-    logs = load_logs()
+    logs = db.read()
     errors = [l for l in logs if l['estado'] == 'ERROR_DE_SISTEMA']
     return render_template('panel_3_errores.html', logs=errors)
 
@@ -153,7 +153,7 @@ def panel_errores_sistema():
 @login_required
 @role_required(['MESA_DEL_USUARIO', 'GESTOR_ERRORES']) # Dev admin access too
 def panel_operador_feedback():
-    logs = load_logs()
+    logs = db.read()
     # Solo mensajes donde el humano dijo "SÍ, el sistema tiene razón"
     public_logs = [l for l in logs if l.get('feedback_humano') == 'CONFIRMADO']
     return render_template('panel_4_operador.html', logs=public_logs)
@@ -170,7 +170,7 @@ def panel_gerencial():
 @login_required
 @role_required(['GERENCIAL', 'EJECUTIVO', 'GESTOR_ERRORES'])
 def panel_trazabilidad():
-    logs = load_logs()
+    logs = db.read()
     return render_template('panel_6_trazabilidad.html', logs=logs)
 
 print("=== SCCP GOVERNANCE MODE v2.0 STARTED ===")
