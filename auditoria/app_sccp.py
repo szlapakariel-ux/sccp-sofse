@@ -7,8 +7,20 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 # Fix path to locate modules if necessary
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 app.secret_key = os.environ.get('SECRET_KEY', 'super_secret_key_dev_mode')
+
+print("=== STARTUP DIAGNOSTICS ===")
+print("RUNNING SCCP FULL MVP")
+print(f"CWD: {os.getcwd()}")
+print(f"Template Folder: {app.template_folder}")
+print(f"Static Folder: {app.static_folder}")
+print(f"Abs Template Path: {os.path.abspath(app.template_folder)}")
+print("===========================")
 
 # --- CONFIG & DATA LOADING ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
