@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCCP Gobierno v3.0</title>
+    <title>SCCP Gobierno v3.1</title>
     <!-- Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+    <!-- Cache Buster v3.1 added -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}?v=3.1">
 </head>
 
 <body>
@@ -28,7 +29,9 @@
 
             <nav class="nav-links">
                 <!-- ROLES -->
-                {% if session.get('role') in ['GESTOR_ERRORES', 'GERENCIAL', 'EJECUTIVO'] %}
+                {% if session.get('role') in ['GESTOR_ERRORES', 'GERENCIAL', 'EJECUTIVO', 'MESA_DEL_USUARIO'] %}
+                <!-- Allow generic access for visual testing of sidebar -->
+                {% if session.get('role') != 'MESA_DEL_USUARIO' %}
                 <a href="{{ url_for('panel_sistema') }}" class="nav-item">
                     <span class="nav-icon">🤖</span> Pre-Análisis
                 </a>
@@ -45,6 +48,7 @@
                 <a href="{{ url_for('panel_gerencial') }}" class="nav-item">
                     <span class="nav-icon">📊</span> Dashboard
                 </a>
+                {% endif %}
                 {% endif %}
 
                 {% if session.get('role') == 'MESA_DEL_USUARIO' %}
