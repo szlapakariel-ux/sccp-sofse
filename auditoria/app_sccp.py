@@ -135,7 +135,7 @@ def panel_auditoria_decision():
     # Show only pending items
     logs = db.read()
     pending_logs = [l for l in logs if l.get('estado') == 'PRE_ANALIZADO']
-    return render_template('panel_2_decision.html', logs=pending_logs)
+    return render_template('panel_2_v2.html', logs=pending_logs)
 
 # PANEL 3: ERRORES DEL SISTEMA (APRENDIZAJE)
 # Cementerio de FP/FN para ajuste de reglas.

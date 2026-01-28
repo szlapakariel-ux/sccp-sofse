@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Mesa de Decisión</h1>
+        <p class="page-desc">Cada decisión entrena al algoritmo v3.0.</p>
+    </div>
+    <div class="badge warning" style="font-size: 1rem; padding: 0.5rem 1rem;">
+        Pendientes: {{ logs|length }}
+    </div>
+</div>
+
+{% if logs %}
+<div class="card-grid">
+    {% for log in logs %}
+    <section class="panel-card log-card">
+
+        <!-- HEADER TARJETA -->
+        <header class="card-header">
+            <div class="meta-row">
+                <span class="log-timestamp">{{ log.fecha_hora }}</span>
+                <span class="log-operator">{{ log.operador.split('@')[0] }}</span>
+                <span class="log-linea">{{ log.linea }}</span>
+            </div>
+            <div class="verdict-row">
+                {% if log.resultado_sistema == 'CORRECTO' %}
+                <span class="badge correct large">✅ CORRECTO</span>
+                {% elif log.resultado_sistema == 'INCORRECTO' %}
+                <span class="badge danger large">🔴 INCORRECTO</span>
+                {% else %}
+                <span class="badge warning large">🟡 OBSERVACIÓN</span>
+                {% endif %}
+
+                {% if log.regla_sistema %}
+                <span class="rule-tag">Regla: {{ log.regla_sistema }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- CUERPO PRINCIPAL (GRID 2 COLUMNAS) -->
+        <div class="card-body-grid">
+
+            <!-- COLUMNA IZQUIERDA: MENSAJE ORIGINAL -->
+            <div class="original-column">
+                <h4 class="column-title">Mensaje Original</h4>
+                <div class="message-box">
+                    <code>{{ log.texto }}</code>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: HALLAZGOS Y RECOMENDACION -->
+            <div class="analysis-column">
+                <h4 class="column-title">Hallazgos del Sistema</h4>
+                <div class="findings-box">
+                    {% if log.detalle_sistema %}
+                    {% for item in log.detalle_sistema.split('|') %}
+                    <div class="finding-item">• {{ item.strip() }}</div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="finding-item">Sin observaciones. Cumple estándar.</div>
+                    {% endif %}
+                </div>
+
+                {% if log.resultado_sistema != 'CORRECTO' %}
+                <h4 class="column-title mt-4">Ejemplo Recomendado</h4>
+                <div class="recommendation-box">
+                    <!-- TODO: Generar ejemplo dinámico en backend -->
+                    <code>XX.X.X - EL TREN [NRO] DE LAS [HH:MM] HS PARTIENDO DE [ORIGEN] HACIA [DESTINO] CIRCULA CON DEMORAS DE [XX] MINUTOS POR [CAUSA].</code>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- FOOTER: ACCIONES -->
+        <footer class="card-footer">
+            <form action="{{ url_for('panel_auditoria_decision') }}" method="POST" class="actions-form">
+                <input type="hidden" name="msg_id" value="{{ log.id }}">
+
+                <!-- ACCION PRINCIPAL -->
+                <button type="submit" name="accion" value="CONFIRMAR" class="btn btn-primary btn-lg btn-block">
+                    ✅ Confirmar Dictamen
+                </button>
+
+                <!-- ZONA DE CORRECCIONES (COLLAPSIBLE O SEPARADO) -->
+                </hr>
+                <div class="system-correction-zone">
+                    <span class="correction-label">⚠ ¿El sistema se equivocó?</span>
+                    <div class="correction-buttons">
+                        <button type="submit" name="accion" value="FALSO_POSITIVO" class="btn btn-sm btn-ghost"
+                            title="El sistema marcó error pero está bien">
+                            FP: Marcó Mal
+                        </button>
+                        <button type="submit" name="accion" value="FALSO_NEGATIVO" class="btn btn-sm btn-ghost"
+                            title="El sistema dijo correcto pero está mal">
+                            FN: No Detectó
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </footer>
+
+    </section>
+    {% endfor %}
+</div>
+{% else %}
+<!-- EMPTY STATE -->
+<div class="empty-state">
+    <div class="empty-icon">🎉</div>
+    <h3>¡Bandeja Limpia!</h3>
+    <p>No hay mensajes pendientes de auditoría.</p>
+</div>
+{% endif %}
+{% endblock %}
