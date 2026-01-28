@@ -115,14 +115,19 @@ def panel_auditoria_decision():
         accion = request.form.get('accion') # CONFIRMAR, FALSO_POSITIVO, FALSO_NEGATIVO
         auditor = session['user']
 
+        nota_auditor = request.form.get('nota', '').strip()
+
         def update_logic(log):
             log['estado'] = 'AUDITADO_HUMANO'
             log['auditor'] = auditor
+            log['fecha_auditoria'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            
             if accion == 'CONFIRMAR':
                 log['feedback_humano'] = 'CONFIRMADO'
             elif accion in ['FALSO_POSITIVO', 'FALSO_NEGATIVO']:
                 log['estado'] = 'ERROR_DE_SISTEMA' # Sacar del flujo operacional
                 log['feedback_humano'] = accion
+                log['nota_auditor'] = nota_auditor
         
         success = db.update_record(msg_id, update_logic)
         if not success:

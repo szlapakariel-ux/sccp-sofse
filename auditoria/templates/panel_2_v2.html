@@ -84,25 +84,91 @@
 
                 <!-- ZONA DE CORRECCIONES (COLLAPSIBLE O SEPARADO) -->
                 </hr>
-                <div class="system-correction-zone">
-                    <span class="correction-label">⚠ ¿El sistema se equivocó?</span>
-                    <div class="correction-buttons">
-                        <button type="submit" name="accion" value="FALSO_POSITIVO" class="btn btn-sm btn-ghost"
-                            title="El sistema marcó error pero está bien">
-                            FP: Marcó Mal
-                        </button>
-                        <button type="submit" name="accion" value="FALSO_NEGATIVO" class="btn btn-sm btn-ghost"
-                            title="El sistema dijo correcto pero está mal">
-                            FN: No Detectó
-                        </button>
+                <!-- ZONA DE CORRECCIONES (HIDDEN BY DEFAULT) -->
+                </hr>
+                <div class="system-correction-zone" id="zone-{{ log.id }}">
+                    <!-- State 1: Buttons -->
+                    <div class="correction-initial" id="initial-{{ log.id }}">
+                        <span class="correction-label">⚠ ¿El sistema se equivocó?</span>
+                        <button type="button" onclick="showCorrection('{{ log.id }}', 'FALSO_POSITIVO')"
+                            class="btn btn-sm btn-ghost">FP: Marcó Mal</button>
+                        <button type="button" onclick="showCorrection('{{ log.id }}', 'FALSO_NEGATIVO')"
+                            class="btn btn-sm btn-ghost">FN: No Detectó</button>
+                    </div>
+
+                    <!-- State 2: Note Input -->
+                    <div class="correction-form" id="form-{{ log.id }}" style="display:none; width: 100%;">
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:0.5rem;">
+                            <strong id="label-{{ log.id }}"
+                                style="color:var(--danger-text); font-size:0.8rem;"></strong>
+                            <button type="button" onclick="cancelCorrection('{{ log.id }}')"
+                                style="font-size:0.8rem; border:none; background:none; cursor:pointer;">(Cancelar)</button>
+                        </div>
+                        <textarea name="nota_temp" id="note-{{ log.id }}" class="form-control"
+                            placeholder="Describa el error del sistema (Obligatorio)..." rows="2"
+                            style="width:100%; margin-bottom:0.5rem;"></textarea>
+                        <!-- Hidden inputs to carry values to the main form -->
+                        <button type="button" onclick="submitCorrection('{{ log.id }}')"
+                            class="btn btn-danger btn-sm btn-block">Registrar Error y Archivar</button>
                     </div>
                 </div>
+
+                <!-- Hidden fields for JS handling -->
+                <input type="hidden" name="nota" id="final-note-{{ log.id }}">
             </form>
         </footer>
 
     </section>
     {% endfor %}
 </div>
+
+<script>
+    function showCorrection(id, type) {
+        document.getElementById('initial-' + id).style.display = 'none';
+        document.getElementById('form-' + id).style.display = 'block';
+
+        // Set the button value for the main form submission later? 
+        // Actually, we can't easily change the clicked button value in a standard form submit without JS intervention.
+        // Let's store the intended action in a data attribute or hidden field if we were using AJAX.
+        // For standard form, we need to inject the action into the form when submitting.
+
+        const label = type === 'FALSO_POSITIVO' ? 'Reportando Falso Positivo (FP)' : 'Reportando Falso Negativo (FN)';
+        document.getElementById('label-' + id).innerText = label;
+        document.getElementById('note-' + id).dataset.action = type;
+        document.getElementById('note-' + id).focus();
+    }
+
+    function cancelCorrection(id) {
+        document.getElementById('form-' + id).style.display = 'none';
+        document.getElementById('initial-' + id).style.display = 'flex';
+        document.getElementById('note-' + id).value = '';
+    }
+
+    function submitCorrection(id) {
+        const noteField = document.getElementById('note-' + id);
+        const note = noteField.value.trim();
+        const action = noteField.dataset.action;
+
+        if (note.length < 5) {
+            alert("Por favor, agregue una nota explicativa del error (mínimo 5 caracteres).");
+            return;
+        }
+
+        // Populate hidden fields
+        document.getElementById('final-note-' + id).value = note;
+
+        // Create a hidden input for the action because we are submitting via JS
+        const form = noteField.closest('form');
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'accion';
+        input.value = action;
+        form.appendChild(input);
+
+        form.submit();
+    }
+</script>
+{% else %}
 {% else %}
 <!-- EMPTY STATE -->
 <div class="empty-state">
