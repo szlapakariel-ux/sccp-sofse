@@ -1,53 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="page-header">
-    <h1>Panel 2: Mesa de Decisión (Auditoría Humana)</h1>
-    <p>Valide el dictamen del sistema. Su decisión es final.</p>
+    <div>
+        <h1 class="page-title">Mesa de Decisión</h1>
+        <p class="page-desc">Valide el dictamen del sistema. Su decisión es final e irrevocable.</p>
+    </div>
+    <div class="badge warning">Pendientes: {{ logs|length }}</div>
 </div>
 
-{% if not logs %}
-<div class="alert success">Bandeja limpia. No hay mensajes pendientes de revisión.</div>
-{% endif %}
-
-<div class="decision-grid">
+{% if logs %}
+<div class="card-grid">
     {% for log in logs %}
-    <div class="card decision-card">
-        <div class="card-header">
-            <span class="badge badge-info">{{ log.timestamp }}</span>
-            <span class="badge">{{ log.operador }}</span>
-        </div>
-        <div class="card-body">
-            <h4>Mensaje Original:</h4>
-            <div class="message-box">{{ log.texto }}</div>
+    <div class="panel-card msg-card">
 
-            <div class="system-proposal">
-                <strong>Propuesta del Sistema:</strong>
-                <span class="prop-val {{ 'error-text' if log.resultado_sistema != 'CORRECTO' else 'success-text' }}">
-                    {{ log.resultado_sistema }}
-                </span>
-                <small>(Regla: {{ log.regla_sistema }})</small>
+        <!-- Header: ID + Time -->
+        <div class="msg-header">
+            <span class="msg-id">ID: {{ log.id }}</span>
+            <span class="msg-meta-item">{{ log.timestamp }}</span>
+        </div>
+
+        <!-- Body: The Message -->
+        <div class="msg-body">
+            {{ log.texto }}
+        </div>
+
+        <!-- Metadata Grid -->
+        <div class="msg-meta">
+            <div class="meta-item">
+                <strong>Operador</strong> {{ log.operador }}
+            </div>
+            <div class="meta-item">
+                <strong>Línea</strong> {{ log.linea }}
             </div>
         </div>
-        <div class="card-actions">
-            <form method="POST" class="action-form">
-                <input type="hidden" name="msg_id" value="{{ log.id }}">
 
-                <button type="submit" name="accion" value="CONFIRMAR" class="btn btn-primary">
-                    ✔ Confirmar Dictamen
-                </button>
-
-                <div class="divider"></div>
-
-                <button type="submit" name="accion" value="FALSO_POSITIVO" class="btn btn-outline-warning">
-                    ⚠ Falso Positivo (Sistema falló)
-                </button>
-
-                <button type="submit" name="accion" value="FALSO_NEGATIVO" class="btn btn-outline-danger">
-                    ⚠ Falso Negativo
-                </button>
-            </form>
+        <!-- System Verdict Box -->
+        <div class="system-verdict">
+            <span class="verdict-title">DICTAMEN AUTOMÁTICO v3.0</span>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    {% if log.resultado_sistema == 'CORRECTO' %}
+                    <span class="badge correct">✅ CORRECTO</span>
+                    {% elif log.resultado_sistema == 'INCORRECTO' %}
+                    <span class="badge danger">🔴 BLOQUEANTE</span>
+                    {% else %}
+                    <span class="badge warning">⚠️ OBSERVACIÓN</span>
+                    {% endif %}
+                </div>
+                <div style="font-size: 0.9rem; color: #4b5563;">
+                    {{ log.detalle_sistema }}
+                </div>
+            </div>
         </div>
+
+        <!-- Action Bar (The Judge's Gavel) -->
+        <form action="{{ url_for('panel_auditoria_decision') }}" method="POST" class="action-bar">
+            <input type="hidden" name="msg_id" value="{{ log.id }}">
+
+            <button type="submit" name="accion" value="CONFIRMAR" class="btn btn-approve">
+                ✔ Confirmar & Enviar
+            </button>
+
+            <button type="submit" name="accion" value="FALSO_POSITIVO" class="btn btn-flag">
+                Analizar Error (FP)
+            </button>
+
+            <button type="submit" name="accion" value="FALSO_NEGATIVO" class="btn btn-reject">
+                Marcar Falso Negativo
+            </button>
+        </form>
+
     </div>
     {% endfor %}
 </div>
+{% else %}
+<div class="panel-card" style="text-align: center; padding: 4rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+    <h3>Bandeja Limpia</h3>
+    <p style="color: var(--text-muted);">No hay mensajes pendientes de auditoría.</p>
+</div>
+{% endif %}
+
 {% endblock %}

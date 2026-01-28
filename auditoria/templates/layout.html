@@ -4,35 +4,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCCP - Sistema de Control Comunicacional</title>
+    <title>SCCP Gobierno v3.0</title>
+    <!-- Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="brand">SCCP SOFSE</div>
-        <div class="menu">
-            {% if session.get('user') %}
-            <span class="user-info">{{ session['user'] }} ({{ session['role'] }})</span>
-            <a href="/validador">Validador</a>
-            <a href="/tablero/operador">Operativo</a>
-            <a href="/tablero/gerencial">Gerencial</a>
-            <a href="/tablero/ejecutivo">Ejecutivo</a>
-            <a href="/logout" class="btn-logout">Salir</a>
-            {% else %}
-            <a href="/login">Ingresar</a>
-            {% endif %}
-        </div>
-    </nav>
 
-    <div class="container">
-        {% block content %}{% endblock %}
+    {% if session.get('user') %}
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-title">
+                    <span>🛡️</span> SCCP
+                </div>
+                <div class="brand-subtitle">Gobierno de Comunicación</div>
+            </div>
+
+            <nav class="nav-links">
+                <!-- ROLES -->
+                {% if session.get('role') in ['GESTOR_ERRORES', 'GERENCIAL', 'EJECUTIVO'] %}
+                <a href="{{ url_for('panel_sistema') }}" class="nav-item">
+                    <span class="nav-icon">🤖</span> Pre-Análisis
+                </a>
+                <a href="{{ url_for('panel_auditoria_decision') }}"
+                    class="nav-item {{ 'active' if request.endpoint == 'panel_auditoria_decision' else '' }}">
+                    <span class="nav-icon">⚖️</span> Mesa de Decisión
+                </a>
+                <a href="{{ url_for('panel_errores_sistema') }}" class="nav-item">
+                    <span class="nav-icon">🧪</span> Errores / Ajuste
+                </a>
+                <a href="{{ url_for('panel_trazabilidad') }}" class="nav-item">
+                    <span class="nav-icon">📜</span> Trazabilidad
+                </a>
+                <a href="{{ url_for('panel_gerencial') }}" class="nav-item">
+                    <span class="nav-icon">📊</span> Dashboard
+                </a>
+                {% endif %}
+
+                {% if session.get('role') == 'MESA_DEL_USUARIO' %}
+                <a href="{{ url_for('panel_operador_feedback') }}" class="nav-item active">
+                    <span class="nav-icon">📬</span> Feedback
+                </a>
+                {% endif %}
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-info">
+                    <div><strong>{{ session.get('user').split('@')[0] }}</strong></div>
+                    <div class="user-role">{{ session.get('role') }}</div>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Salir</a>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
     </div>
+    {% else %}
+    <!-- Login View Container -->
+    {% block login_content %}{% endblock %}
+    {% endif %}
 
-    <footer class="footer">
-        <p>Trenes Argentinos - Sistema de Control de Calidad Comunicacional (Pre-Publicación)</p>
-    </footer>
 </body>
 
 </html>
