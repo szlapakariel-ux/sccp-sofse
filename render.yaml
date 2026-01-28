@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sccp-prepublish
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn auditoria.app_sccp:app --bind 0.0.0.0:$PORT
+    plan: free
+    branch: main
+    numInstances: 1
+    healthCheckPath: /login
+
+  - type: web
+    name: auditoria-postenvio
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app_minimal:app --bind 0.0.0.0:$PORT
+    plan: free
+    branch: main
+    numInstances: 1
+    healthCheckPath: /
