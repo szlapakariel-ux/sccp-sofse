@@ -82,6 +82,268 @@
                     ✅ Confirmar Dictamen
                 </button>
 
+                <!-- ZONA DE CORRECCIONES (HIDDEN BY DEFAULT) -->
+                </hr>
+                <div class="system-correction-zone" id="zone-{{ log.id }}">
+                    <!-- State 1: Buttons -->
+                    <div class="correction-initial" id="initial-{{ log.id }}">
+                        <span class="correction-label">⚠ ¿El sistema se equivocó?</span>
+                        <button type="button" onclick="showCorrection('{{ log.id }}', 'FALSO_POSITIVO')"
+                            class="btn btn-sm btn-ghost">FP: Marcó Mal</button>
+                        <button type="button" onclick="showCorrection('{{ log.id }}', 'FALSO_NEGATIVO')"
+                            class="btn btn-sm btn-ghost">FN: No Detectó</button>
+                    </div>
+
+                    <!-- State 2: Note Input -->
+                    <div class="correction-form" id="form-{{ log.id }}" style="display:none; width: 100%;">
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:0.5rem;">
+                            <strong id="label-{{ log.id }}"
+                                style="color:var(--danger-text); font-size:0.8rem;"></strong>
+                            <button type="button" onclick="cancelCorrection('{{ log.id }}')"
+                                style="font-size:0.8rem; border:none; background:none; cursor:pointer;">(Cancelar)</button>
+                        </div>
+                        <textarea name="nota_temp" id="note-{{ log.id }}" class="form-control"
+                            placeholder="Describa el error del sistema (Obligatorio)..." rows="2"
+                            style="width:100%; margin-bottom:0.5rem;"></textarea>
+                        <!-- Hidden inputs to carry values to the main form -->
+                        <button type="button" onclick="submitCorrection('{{ log.id }}')"
+                            class="btn btn-danger btn-sm btn-block">Registrar Error y Archivar</button>
+                    </div>
+                </div>
+
+                <!-- Hidden fields for JS handling -->
+                <input type="hidden" name="nota" id="final-note-{{ log.id }}">
+            </form>
+        </footer>
+
+    </section>
+    {% endfor %}
+</div>
+{% else %}
+<!-- EMPTY STATE -->
+<div class="empty-state">
+    <div class="empty-icon">🎉</div>
+    <h3>¡Bandeja Limpia!</h3>
+    <p>No hay mensajes pendientes de auditoría.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    /* ========= Toast ========= */
+    let toastTimer = null;
+    function showToast(msg, type = 'ok') {
+        let el = document.getElementById('toast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'toast';
+            el.className = 'toast';
+            document.body.appendChild(el);
+        }
+        el.className = 'toast'; // Reset classes
+        el.classList.add(type === 'ok' ? 'toast--ok' : 'toast--err');
+        el.textContent = msg;
+        el.hidden = false;
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { el.hidden = true; }, 2000);
+    }
+
+    /* ========= Anti doble submit ========= */
+    function lockButtons(container, locked = true) {
+        if (!container) return;
+        const btns = container.querySelectorAll('button');
+        btns.forEach(b => b.disabled = locked);
+        container.classList.toggle('is-loading', locked);
+    }
+
+    function getActiveCard() {
+        return document.querySelector('.panel-card'); // tarjeta única
+    }
+
+    /* ========= Correction Logic (FP/FN) ========= */
+    function showCorrection(id, type) {
+        document.getElementById('initial-' + id).style.display = 'none';
+        document.getElementById('form-' + id).style.display = 'block';
+        
+        const label = type === 'FALSO_POSITIVO' ? 'Reportando Falso Positivo (FP)' : 'Reportando Falso Negativo (FN)';
+        document.getElementById('label-' + id).innerText = label;
+        
+        const noteField = document.getElementById('note-' + id);
+        noteField.dataset.action = type;
+        noteField.focus();
+    }
+
+    function cancelCorrection(id) {
+        document.getElementById('form-' + id).style.display = 'none';
+        document.getElementById('initial-' + id).style.display = 'flex';
+        document.getElementById('note-' + id).value = '';
+    }
+
+    function submitCorrection(id) {
+        const noteField = document.getElementById('note-' + id);
+        const note = noteField.value.trim();
+        const action = noteField.dataset.action;
+
+        if (note.length < 5) {
+            showToast("⚠️ La nota debe tener al menos 5 caracteres", "err");
+            noteField.focus();
+            return;
+        }
+
+        // Lock UI
+        const card = getActiveCard();
+        lockButtons(card, true);
+
+        // Populate hidden fields
+        document.getElementById('final-note-' + id).value = note;
+        const form = noteField.closest('form');
+        
+        // Append action hidden input
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'accion';
+        input.value = action;
+        form.appendChild(input);
+
+        // Submit
+        form.submit(); 
+    }
+
+    /* ========= Hotkeys & Form Submit Intercept ========= */
+    // Intercept main Confirm button to add UX
+    document.addEventListener('submit', (e) => {
+        const form = e.target;
+        if (!form.classList.contains('actions-form')) return;
+
+        // If it's the main submit (not via submitCorrection JS), lock it
+        const card = getActiveCard();
+        lockButtons(card, true);
+        // Let natural submit happen
+    });
+
+    // Hotkeys
+    document.addEventListener('keydown', (e) => {
+        if (e.repeat) return;
+        
+        // Ignore if typing in textarea
+        const tag = document.activeElement.tagName;
+        if (tag === 'TEXTAREA' || tag === 'INPUT') {
+            if (e.key === 'Escape') {
+                // Try to cancel correction if open
+                const activeId = document.activeElement.id.replace('note-', '');
+                if (activeId) cancelCorrection(activeId);
+            }
+            return;
+        }
+
+        const key = e.key.toLowerCase();
+        const card = getActiveCard();
+        if (!card) return;
+        
+        // ID extraction if needed, but we assume single card
+        // We find buttons inside the active card
+        if (key === 'enter') {
+            // Trigger Confirm
+            const confirmBtn = card.querySelector('button[value="CONFIRMAR"]');
+            if (confirmBtn && !confirmBtn.disabled) confirmBtn.click();
+        }
+        if (key === 'f') {
+            // Trigger FP
+            const fpBtn = card.querySelector('button[onclick*="FALSO_POSITIVO"]');
+            if (fpBtn && fpBtn.offsetParent !== null) fpBtn.click(); // offsetParent checks visibility
+        }
+        if (key === 'n') {
+            const fnBtn = card.querySelector('button[onclick*="FALSO_NEGATIVO"]');
+            if (fnBtn && fnBtn.offsetParent !== null) fnBtn.click();
+        }
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Mesa de Decisión</h1>
+        <p class="page-desc">Cada decisión entrena al algoritmo v3.0.</p>
+    </div>
+    <div class="badge warning" style="font-size: 1rem; padding: 0.5rem 1rem;">
+        Pendientes: {{ logs|length }}
+    </div>
+</div>
+
+{% if logs %}
+<div class="card-grid">
+    {% for log in logs %}
+    <section class="panel-card log-card">
+
+        <!-- HEADER TARJETA -->
+        <header class="card-header">
+            <div class="meta-row">
+                <span class="log-timestamp">{{ log.fecha_hora }}</span>
+                <span class="log-operator">{{ log.operador.split('@')[0] }}</span>
+                <span class="log-linea">{{ log.linea }}</span>
+            </div>
+            <div class="verdict-row">
+                {% if log.resultado_sistema == 'CORRECTO' %}
+                <span class="badge correct large">✅ CORRECTO</span>
+                {% elif log.resultado_sistema == 'INCORRECTO' %}
+                <span class="badge danger large">🔴 INCORRECTO</span>
+                {% else %}
+                <span class="badge warning large">🟡 OBSERVACIÓN</span>
+                {% endif %}
+
+                {% if log.regla_sistema %}
+                <span class="rule-tag">Regla: {{ log.regla_sistema }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- CUERPO PRINCIPAL (GRID 2 COLUMNAS) -->
+        <div class="card-body-grid">
+
+            <!-- COLUMNA IZQUIERDA: MENSAJE ORIGINAL -->
+            <div class="original-column">
+                <h4 class="column-title">Mensaje Original</h4>
+                <div class="message-box">
+                    <code>{{ log.texto }}</code>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: HALLAZGOS Y RECOMENDACION -->
+            <div class="analysis-column">
+                <h4 class="column-title">Hallazgos del Sistema</h4>
+                <div class="findings-box">
+                    {% if log.detalle_sistema %}
+                    {% for item in log.detalle_sistema.split('|') %}
+                    <div class="finding-item">• {{ item.strip() }}</div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="finding-item">Sin observaciones. Cumple estándar.</div>
+                    {% endif %}
+                </div>
+
+                {% if log.resultado_sistema != 'CORRECTO' %}
+                <h4 class="column-title mt-4">Ejemplo Recomendado</h4>
+                <div class="recommendation-box">
+                    <!-- TODO: Generar ejemplo dinámico en backend -->
+                    <code>XX.X.X - EL TREN [NRO] DE LAS [HH:MM] HS PARTIENDO DE [ORIGEN] HACIA [DESTINO] CIRCULA CON DEMORAS DE [XX] MINUTOS POR [CAUSA].</code>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- FOOTER: ACCIONES -->
+        <footer class="card-footer">
+            <form action="{{ url_for('panel_auditoria_decision') }}" method="POST" class="actions-form">
+                <input type="hidden" name="msg_id" value="{{ log.id }}">
+
+                <!-- ACCION PRINCIPAL -->
+                <button type="submit" name="accion" value="CONFIRMAR" class="btn btn-primary btn-lg btn-block">
+                    ✅ Confirmar Dictamen
+                </button>
+
                 <!-- ZONA DE CORRECCIONES (COLLAPSIBLE O SEPARADO) -->
                 </hr>
                 <!-- ZONA DE CORRECCIONES (HIDDEN BY DEFAULT) -->
