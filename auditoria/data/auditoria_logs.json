@@ -1,35 +1,35 @@
 [
-    {
-        "id": "#00647842",
-        "timestamp": "2026-01-06 07:50",
-        "operador": "Gustavo Reinaga",
-        "texto": "17.1.A - EL TREN N   3337 DEMORANDO EN ESTACION PALERMO POR INCONVENIENTES EN LA FORMACION  21 .",
-        "estado": "PRE_ANALIZADO",
-        "resultado_sistema": "INCORRECTO",
-        "regla_sistema": "R-COMP-INCOMPLETO",
-        "feedback_humano": null,
-        "detalle_sistema": "Falta causa específica, Horario, Origen/Destino"
-    },
-    {
-        "id": "#00648188",
-        "timestamp": "2026-01-08 03:39",
-        "operador": "Carlos Mendoza",
-        "texto": "17.2.A - EL TREN  N  @T3312 DE LAS 0515  HS PARTIENDO DESDE JOSE C. PAZ  HACIA @ERETIRO  HA  SIDO CANCELADO POR RAZONES OPERATIVAS",
-        "estado": "PRE_ANALIZADO",
-        "resultado_sistema": "OBSERVACION",
-        "regla_sistema": "R-CODIGO-INCONSISTENTE",
-        "feedback_humano": null,
-        "detalle_sistema": "Uso de código 17 para contingencia operativa (05). Timing tardío."
-    },
-    {
-        "id": "#00647613",
-        "timestamp": "2026-01-05 07:53",
-        "operador": "Facundo Ezequiel Martinez",
-        "texto": "3.2.A EL TREN 3341 DE LAS 08 01HS. PARTIENDO DESDE RETIRO (LSM)  HACIA JOSE C. PAZ  HA SIDO CANCELADO POR PROBLEMAS TECNICOS",
-        "estado": "AUDITADO_HUMANO",
-        "resultado_sistema": "CORRECTO",
-        "regla_sistema": "R-MODELO-BEST-PRACTICE",
-        "feedback_humano": "CONFIRMADO",
-        "detalle_sistema": "Estructura impecable. Timing excelente."
-    }
+  {
+    "id": "#00647842",
+    "timestamp": "2026-01-06 07:50",
+    "operador": "Gustavo Reinaga",
+    "texto": "17.1.A - EL TREN N   3337 DEMORANDO EN ESTACION PALERMO POR INCONVENIENTES EN LA FORMACION  21 .",
+    "estado": "PRE_ANALIZADO",
+    "resultado_sistema": "INCORRECTO",
+    "regla_sistema": "R-DETECTADA-V3",
+    "feedback_humano": null,
+    "detalle_sistema": "Falta hora programada | Falta origen y destino | \u26a0\ufe0f C\u00f3digo 17 es excepcional. Verificar si existe c\u00f3digo espec\u00edfico | \ud83d\udca1 Mensaje sobre formaciones sin causa espec\u00edfica. Si hay motivo, agregarlo"
+  },
+  {
+    "id": "#00648188",
+    "timestamp": "2026-01-08 03:39",
+    "operador": "Carlos Mendoza",
+    "texto": "17.2.A - EL TREN  N  @T3312 DE LAS 0515  HS PARTIENDO DESDE JOSE C. PAZ  HACIA @ERETIRO  HA  SIDO CANCELADO POR RAZONES OPERATIVAS",
+    "estado": "PRE_ANALIZADO",
+    "resultado_sistema": "OBSERVACION",
+    "regla_sistema": "R-DETECTADA-V3",
+    "feedback_humano": null,
+    "detalle_sistema": "\u26a0\ufe0f Inconsistencia en c\u00f3digo: Usaste 17 pero la contingencia corresponde al c\u00f3digo 05 | \u26a0\ufe0f C\u00f3digo 17 es excepcional. Verificar si existe c\u00f3digo espec\u00edfico | \ud83d\udca1 Formato: SUGERENCIA: Se recomienda usar 'DE LAS HH:MM HS' (con dos puntos) en lugar de sin separador. IMPORTANTE: SIEMPRE SEGUIR EL PROCEDIMIENTO. | \ud83d\udca1 Formato: Formato no est\u00e1ndar: Se detect\u00f3 el prefijo interno '@T'. P/ comunicaci\u00f3n externa usar 'TREN N\u00b0 ...'."
+  },
+  {
+    "id": "#00647613",
+    "timestamp": "2026-01-05 07:53",
+    "operador": "Facundo Ezequiel Martinez",
+    "texto": "3.2.A EL TREN 3341 DE LAS 08 01HS. PARTIENDO DESDE RETIRO (LSM)  HACIA JOSE C. PAZ  HA SIDO CANCELADO POR PROBLEMAS TECNICOS",
+    "estado": "AUDITADO_HUMANO",
+    "resultado_sistema": "OBSERVACION",
+    "regla_sistema": "R-DETECTADA-V3",
+    "feedback_humano": "CONFIRMADO",
+    "detalle_sistema": "\ud83d\udca1 Formato: SUGERENCIA: Se recomienda usar 'DE LAS HH:MM HS' (con dos puntos). IMPORTANTE: SIEMPRE SEGUIR EL PROCEDIMIENTO."
+  }
 ]
