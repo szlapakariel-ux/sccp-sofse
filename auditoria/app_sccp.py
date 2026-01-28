@@ -21,24 +21,15 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROLES_FILE = os.path.join(BASE_DIR, 'config', 'roles.json')
 LOGS_FILE = os.path.join(BASE_DIR, 'data', 'auditoria_logs.json')
 
+# --- DB SECURE SINGLETON ---
+from utils.db_store import get_db
+db = get_db(LOGS_FILE)
+
 def load_roles():
     try:
         with open(ROLES_FILE, 'r', encoding='utf-8') as f:
             return json.load(f).get('users', {})
     except: return {}
-
-def load_logs():
-    try:
-        with open(LOGS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except: return []
-
-def save_logs(logs):
-    try:
-        with open(LOGS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(logs, f, indent=2)
-    except Exception as e:
-        print(f"Error saving: {e}")
 
 USERS_DB = load_roles()
 
@@ -119,28 +110,31 @@ def panel_sistema():
 @login_required
 @role_required(['GESTOR_ERRORES', 'GERENCIAL']) # Auditores
 def panel_auditoria_decision():
-    logs = load_logs()
-    
     if request.method == 'POST':
         msg_id = request.form.get('msg_id')
         accion = request.form.get('accion') # CONFIRMAR, FALSO_POSITIVO, FALSO_NEGATIVO
+        auditor = session['user']
+
+        def update_logic(log):
+            log['estado'] = 'AUDITADO_HUMANO'
+            log['auditor'] = auditor
+            if accion == 'CONFIRMAR':
+                log['feedback_humano'] = 'CONFIRMADO'
+            elif accion in ['FALSO_POSITIVO', 'FALSO_NEGATIVO']:
+                log['estado'] = 'ERROR_DE_SISTEMA' # Sacar del flujo operacional
+                log['feedback_humano'] = accion
         
-        for log in logs:
-            if log['id'] == msg_id:
-                log['estado'] = 'AUDITADO_HUMANO'
-                if accion == 'CONFIRMAR':
-                    log['feedback_humano'] = 'CONFIRMADO'
-                    # Here logic would send to operator
-                elif accion in ['FALSO_POSITIVO', 'FALSO_NEGATIVO']:
-                    log['estado'] = 'ERROR_DE_SISTEMA' # Sacar del flujo operacional
-                    log['feedback_humano'] = accion
-                log['auditor'] = session['user']
-                break
-        save_logs(logs)
+        success = db.update_record(msg_id, update_logic)
+        if not success:
+            flash("Error: El mensaje fue modificado por otro auditor.", "error")
+        else:
+            flash("Decisión registrada.", "success")
+            
         return redirect(url_for('panel_auditoria_decision'))
 
     # Show only pending items
-    pending_logs = [l for l in logs if l['estado'] == 'PRE_ANALIZADO']
+    logs = db.read()
+    pending_logs = [l for l in logs if l.get('estado') == 'PRE_ANALIZADO']
     return render_template('panel_2_decision.html', logs=pending_logs)
 
 # PANEL 3: ERRORES DEL SISTEMA (APRENDIZAJE)
