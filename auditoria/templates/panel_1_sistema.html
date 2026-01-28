@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 1: Pre-Análisis (Sistema)</h1>
+    <p>Monitor de tráfico y actividad automática.</p>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Hora</th>
+            <th>Operador</th>
+            <th>Resultado Auto</th>
+            <th>Estado Actual</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.operador }}</td>
+            <td>{{ log.resultado_sistema }}</td>
+            <td>{{ log.estado }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

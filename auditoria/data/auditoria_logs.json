@@ -1,32 +1,42 @@
 [
     {
-        "timestamp": "2026-01-27 10:15",
-        "linea": "Sarmiento",
-        "estado": "RECHAZADO",
-        "motivo": "Tono incorrecto"
+        "id": "MSG-1001",
+        "timestamp": "2026-01-28 08:30",
+        "operador": "op1@sofse",
+        "texto": "Demoras en ramal Tigre por falla técnica.",
+        "estado": "PRE_ANALIZADO",
+        "resultado_sistema": "CORRECTO",
+        "regla_sistema": "R-102",
+        "feedback_humano": null
     },
     {
-        "timestamp": "2026-01-27 10:20",
-        "linea": "Mitre",
-        "estado": "APROBADO",
-        "motivo": "-"
+        "id": "MSG-1002",
+        "timestamp": "2026-01-28 08:45",
+        "operador": "op2@sofse",
+        "texto": "Lamentamos las molestias ocasionadas.",
+        "estado": "PRE_ANALIZADO",
+        "resultado_sistema": "OBSERVACION",
+        "regla_sistema": "R-PROHIBIDA-LAMENTAR",
+        "feedback_humano": null
     },
     {
-        "timestamp": "2026-01-27 10:45",
-        "linea": "Roca",
-        "estado": "APROBADO",
-        "motivo": "-"
+        "id": "MSG-1003",
+        "timestamp": "2026-01-28 09:00",
+        "operador": "op1@sofse",
+        "texto": "Interrupción total por accidente.",
+        "estado": "AUDITADO_HUMANO",
+        "resultado_sistema": "CORRECTO",
+        "regla_sistema": "R-CRITICA",
+        "feedback_humano": "CONFIRMADO"
     },
     {
-        "timestamp": "2026-01-27 11:00",
-        "linea": "Belgrano Sur",
-        "estado": "RECHAZADO",
-        "motivo": "Falta horario"
-    },
-    {
-        "timestamp": "2026-01-27 11:30",
-        "linea": "Sarmiento",
-        "estado": "APROBADO",
-        "motivo": "-"
+        "id": "MSG-1004",
+        "timestamp": "2026-01-28 09:15",
+        "operador": "op3@sofse",
+        "texto": "Tren corto a Liniers.",
+        "estado": "ERROR_DE_SISTEMA",
+        "resultado_sistema": "INCORRECTO",
+        "regla_sistema": "R-TREN-CORTO",
+        "feedback_humano": "FALSO_POSITIVO"
     }
 ]

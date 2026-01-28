@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 3: Errores del Sistema (Aprendizaje)</h1>
+    <p>Registro técnico de Falsos Positivos/Negativos para ajuste de reglas.</p>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Regla Fallida</th>
+            <th>Tipo de Error</th>
+            <th>Texto Conflictivo</th>
+            <th>Auditor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.id }}</td>
+            <td><code>{{ log.regla_sistema }}</code></td>
+            <td><span class="badge badge-danger">{{ log.feedback_humano }}</span></td>
+            <td>{{ log.texto }}</td>
+            <td>{{ log.auditor }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

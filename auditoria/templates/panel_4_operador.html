@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 4: Feedback Operativo</h1>
+    <p>Resultados validados y notificaciones de calidad.</p>
+</div>
+
+<div class="feedback-list">
+    {% for log in logs %}
+    <div class="card feedback-card">
+        <div class="feedback-header">
+            <span class="timestamp">{{ log.timestamp }}</span>
+            {% if log.resultado_sistema == 'CORRECTO' %}
+            <span class="badge badge-success">APROBADO</span>
+            {% else %}
+            <span class="badge badge-warning">OBSERVACIÓN</span>
+            {% endif %}
+        </div>
+        <div class="feedback-body">
+            <p>"{{ log.texto }}"</p>
+            {% if log.resultado_sistema != 'CORRECTO' %}
+            <div class="feedback-msg">
+                <strong>Sugerencia de Calidad:</strong>
+                Recuerde verificar el tono institucional. Evite disculpas personales.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 2: Mesa de Decisión (Auditoría Humana)</h1>
+    <p>Valide el dictamen del sistema. Su decisión es final.</p>
+</div>
+
+{% if not logs %}
+<div class="alert success">Bandeja limpia. No hay mensajes pendientes de revisión.</div>
+{% endif %}
+
+<div class="decision-grid">
+    {% for log in logs %}
+    <div class="card decision-card">
+        <div class="card-header">
+            <span class="badge badge-info">{{ log.timestamp }}</span>
+            <span class="badge">{{ log.operador }}</span>
+        </div>
+        <div class="card-body">
+            <h4>Mensaje Original:</h4>
+            <div class="message-box">{{ log.texto }}</div>
+
+            <div class="system-proposal">
+                <strong>Propuesta del Sistema:</strong>
+                <span class="prop-val {{ 'error-text' if log.resultado_sistema != 'CORRECTO' else 'success-text' }}">
+                    {{ log.resultado_sistema }}
+                </span>
+                <small>(Regla: {{ log.regla_sistema }})</small>
+            </div>
+        </div>
+        <div class="card-actions">
+            <form method="POST" class="action-form">
+                <input type="hidden" name="msg_id" value="{{ log.id }}">
+
+                <button type="submit" name="accion" value="CONFIRMAR" class="btn btn-primary">
+                    ✔ Confirmar Dictamen
+                </button>
+
+                <div class="divider"></div>
+
+                <button type="submit" name="accion" value="FALSO_POSITIVO" class="btn btn-outline-warning">
+                    ⚠ Falso Positivo (Sistema falló)
+                </button>
+
+                <button type="submit" name="accion" value="FALSO_NEGATIVO" class="btn btn-outline-danger">
+                    ⚠ Falso Negativo
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

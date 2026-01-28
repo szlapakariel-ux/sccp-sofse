@@ -1,0 +1,57 @@
+[
+    {
+        "Url":  "https://sccp-prepublish.onrender.com/login",
+        "Method":  "GET",
+        "StatusDescription":  "OK",
+        "BodyHashSHA256":  "45435960e965cc3fe865e15bd37d8050ba70b0b0f11e3b68bafda96963e8d118",
+        "RedirectLocation":  null,
+        "StatusCode":  200,
+        "Name":  "Login",
+        "ContentLength":  1620,
+        "Timestamp":  "2026-01-28 00:29:47"
+    },
+    {
+        "Url":  "https://sccp-prepublish.onrender.com/validador",
+        "Method":  "HEAD",
+        "StatusDescription":  "Operación no válida dado el estado actual del objeto.",
+        "BodyHashSHA256":  null,
+        "RedirectLocation":  null,
+        "StatusCode":  500,
+        "Name":  "Validador (No Auth)",
+        "ContentLength":  0,
+        "Timestamp":  "2026-01-28 00:30:28"
+    },
+    {
+        "Url":  "https://sccp-prepublish.onrender.com/tablero/operador",
+        "Method":  "HEAD",
+        "StatusDescription":  "Operación no válida dado el estado actual del objeto.",
+        "BodyHashSHA256":  null,
+        "RedirectLocation":  null,
+        "StatusCode":  500,
+        "Name":  "Tablero Operador (No Auth)",
+        "ContentLength":  0,
+        "Timestamp":  "2026-01-28 00:30:29"
+    },
+    {
+        "Url":  "https://auditoria-postenvio.onrender.com/",
+        "Method":  "HEAD",
+        "StatusDescription":  "OK",
+        "BodyHashSHA256":  null,
+        "RedirectLocation":  null,
+        "StatusCode":  200,
+        "Name":  "Legacy Root",
+        "ContentLength":  0,
+        "Timestamp":  "2026-01-28 00:30:29"
+    },
+    {
+        "Url":  "https://auditoria-postenvio.onrender.com/tablero/operador",
+        "Method":  "HEAD",
+        "StatusDescription":  "Not Found",
+        "BodyHashSHA256":  null,
+        "RedirectLocation":  null,
+        "StatusCode":  404,
+        "Name":  "Legacy Insolation Check",
+        "ContentLength":  0,
+        "Timestamp":  "2026-01-28 00:30:50"
+    }
+]

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 6: Trazabilidad ISO</h1>
+    <p>Historia clínica completa de cada mensaje.</p>
+</div>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Original</th>
+            <th>Sistema</th>
+            <th>Auditor</th>
+            <th>Estado Final</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td><small>{{ log.id }}</small></td>
+            <td>{{ log.texto[:30] }}...</td>
+            <td>{{ log.resultado_sistema }}</td>
+            <td>{{ log.feedback_humano or '-' }}</td>
+            <td><strong>{{ log.estado }}</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Panel 5: Tablero Gerencial</h1>
+    <p>Indicadores de Desempeño y Calidad.</p>
+</div>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">98.5%</div>
+        <div class="stat-label">Precisión del Sistema</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Mensajes Hoy</div>
+    </div>
+    <div class="stat-card error">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Falsos Positivos (Mes)</div>
+    </div>
+</div>
+{% endblock %}
