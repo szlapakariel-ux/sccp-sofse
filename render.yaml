@@ -5,7 +5,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn auditoria.app_sccp:app --bind 0.0.0.0:$PORT
     plan: free
-    branch: main
+    branch: master
     numInstances: 1
     healthCheckPath: /login
 
@@ -15,6 +15,6 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app_minimal:app --bind 0.0.0.0:$PORT
     plan: free
-    branch: main
+    branch: master
     numInstances: 1
     healthCheckPath: /
